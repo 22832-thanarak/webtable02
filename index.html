@@ -1,739 +1,164 @@
 <!DOCTYPE html>
-
 <html lang="th">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Pet Lovers - คู่มือสายพันธุ์สัตว์เลี้ยงยอดนิยม</title>
-
+    <title>Pet Data Management - ระบบเก็บข้อมูลสัตว์เลี้ยง</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
-
     
-
     <style>
-
         /* รีเซ็ตค่าพื้นฐาน */
-
         *, *::before, *::after {
-
             box-sizing: border-box;
-
             margin: 0;
-
             padding: 0;
-
         }
-
-
 
         body {
-
             font-family: 'Sarabun', sans-serif;
-
-            background-color: #fef7f2; /* ปรับโทนอุ่นให้เข้ากับสัตว์เลี้ยง */
-
+            background-color: #fef7f2;
             color: #2c3e50;
-
             padding: 30px 15px;
-
             min-height: 100vh;
-
         }
-
-
 
         /* ส่วนหัวข้อเว็บ */
-
         header {
-
             text-align: center;
-
-            margin-bottom: 40px;
-
-            background: linear-gradient(135deg, #e67e22, #d35400); /* โทนส้มอบอุ่น */
-
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #e67e22, #d35400);
             color: white;
-
             padding: 30px 20px;
-
             border-radius: 16px;
-
             box-shadow: 0 10px 25px rgba(211, 84, 0, 0.15);
-
         }
-
-
 
         header h1 {
-
             font-size: 32px;
-
             font-weight: 700;
-
             margin-bottom: 8px;
-
         }
-
-
 
         header p {
-
             font-size: 16px;
-
             color: #fdebd0;
-
             font-weight: 300;
-
         }
-
-
 
         /* กล่องเนื้อหาหลักแบ่งซ้าย-ขวา */
-
         .main-container {
-
-            max-width: 1200px;
-
+            max-width: 1250px;
             margin: 0 auto;
-
             display: grid;
-
-            grid-template-columns: 350px 1fr;
-
-            gap: 30px;
-
+            grid-template-columns: 300px 1fr;
+            gap: 25px;
         }
-
-
 
         /* ฝั่งซ้าย: เมนูเลือกประเภทสัตว์เลี้ยง */
-
         .map-sidebar {
-
             background: #ffffff;
-
             padding: 25px;
-
             border-radius: 16px;
-
             box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-
             border: 1px solid #f5e6dc;
-
             display: flex;
-
             flex-direction: column;
-
-            gap: 15px;
-
+            gap: 12px;
+            height: fit-content;
         }
-
-
 
         .sidebar-title {
-
             font-size: 18px;
-
             font-weight: 700;
-
             color: #d35400;
-
-            margin-bottom: 10px;
-
+            margin-bottom: 8px;
             display: flex;
-
             align-items: center;
-
             gap: 8px;
-
         }
-
-
 
         /* ปุ่มเลือกประเภท */
-
         .region-btn {
-
             width: 100%;
-
-            padding: 16px 20px;
-
-            font-size: 16px;
-
+            padding: 15px 18px;
+            font-size: 15px;
             font-weight: 600;
-
             color: #5d6d7e;
-
             background-color: #fdfefe;
-
             border: 2px solid #ebedef;
-
             border-radius: 12px;
-
             cursor: pointer;
-
             text-align: left;
-
-            transition: all 0.25s ease;
-
+            transition: all 0.2s ease;
             display: flex;
-
             justify-content: space-between;
-
             align-items: center;
-
         }
-
-
 
         .region-btn:hover {
-
             background-color: #fdf2e9;
-
             border-color: #fadbd8;
-
             color: #e67e22;
-
             transform: translateY(-2px);
-
         }
-
-
 
         .region-btn.active {
-
             background: linear-gradient(135deg, #e67e22, #d35400);
-
             border-color: #e67e22;
-
             color: #ffffff;
-
             box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
-
         }
-
-
 
         .region-btn::after {
-
             content: '➔';
-
-            font-size: 14px;
-
+            font-size: 13px;
             opacity: 0.7;
-
         }
-
-
 
         .region-btn.active::after {
-
             content: '🐾';
-
             opacity: 1;
-
         }
 
-
-
-        /* ฝั่งขวา: แสดงข้อมูลของประเภทนั้นๆ */
-
+        /* ฝั่งขวา: พื้นที่จัดการข้อมูล */
         .content-area {
-
-            background: #ffffff;
-
-            padding: 35px;
-
-            border-radius: 16px;
-
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-
-            border: 1px solid #f5e6dc;
-
-        }
-
-
-
-        .region-header-title {
-
-            font-size: 26px;
-
-            font-weight: 700;
-
-            color: #2c3e50;
-
-            margin-bottom: 25px;
-
-            border-bottom: 3px solid #f5e6dc;
-
-            padding-bottom: 12px;
-
             display: flex;
-
-            align-items: center;
-
-            gap: 10px;
-
-        }
-
-
-
-        /* โครงสร้างการ์ดสัตว์เลี้ยง */
-
-        .places-grid {
-
-            display: flex;
-
             flex-direction: column;
-
             gap: 25px;
-
         }
 
-
-
-        .place-card {
-
-            display: grid;
-
-            grid-template-columns: 240px 1fr;
-
-            gap: 20px;
-
-            background: #fdfefe;
-
-            border-radius: 12px;
-
-            overflow: hidden;
-
-            border: 1px solid #ebedef;
-
-            transition: transform 0.2s ease;
-
+        /* ส่วนฟอร์มเพิ่มข้อมูล */
+        .form-card {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid #f5e6dc;
         }
 
-
-
-        .place-card:hover {
-
-            transform: scale(1.01);
-
-            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-
-        }
-
-
-
-        /* กล่องใส่รูปภาพ */
-
-        .place-image-box {
-
-            width: 100%;
-
-            height: 160px;
-
-            background-color: #edbb99;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            color: #7f8c8d;
-
-            font-size: 14px;
-
-            position: relative;
-
-            overflow: hidden;
-
-        }
-
-
-
-        .place-image-box img {
-
-            width: 100%;
-
-            height: 100%;
-
-            object-fit: cover;
-
-            position: absolute;
-
-            top: 0;
-
-            left: 0;
-
-        }
-
-
-
-        .place-info {
-
-            padding: 20px;
-
-            display: flex;
-
-            flex-direction: column;
-
-            justify-content: center;
-
-        }
-
-
-
-        .place-name {
-
+        .form-title {
             font-size: 18px;
-
             font-weight: 700;
-
-            color: #d35400;
-
-            margin-bottom: 8px;
-
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-
-
-        .place-description {
-
-            font-size: 14px;
-
-            color: #7f8c8d;
-
-            line-height: 1.6;
-
+        .pet-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
 
-
-
-        /* ปรับแต่งเมื่อเปิดบนมือถือ */
-
-        @media (max-width: 900px) {
-
-            .main-container {
-
-                grid-template-columns: 1fr;
-
-            }
-
-            .place-card {
-
-                grid-template-columns: 1fr;
-
-            }
-
-            .place-image-box {
-
-                height: 200px;
-
-            }
-
+        .form-group-full {
+            grid-column: span 2;
         }
 
-    </style>
-
-</head>
-
-<body>
-
-
-
-    <header>
-
-        <h1>🐾 คู่มือสายพันธุ์สัตว์เลี้ยงยอดนิยม</h1>
-
-        <p>คลิกเลือกประเภทสัตว์เลี้ยงบนแถบเมนูด้านซ้าย เพื่อทำความรู้จักกับสายพันธุ์ไฮไลต์ยอดฮิต</p>
-
-    </header>
-
-
-
-    <div class="main-container">
-
-        
-
-        <div class="map-sidebar">
-
-            <div class="sidebar-title">🐶 เลือกประเภทสัตว์เลี้ยง</div>
-
-            <button class="region-btn active" onclick="changeRegion('dog', this)">สุนัข (Dogs)</button>
-
-            <button class="region-btn" onclick="changeRegion('cat', this)">แมว (Cats)</button>
-
-            <button class="region-btn" onclick="changeRegion('rodent', this)">สัตว์ฟันแทะ (Rodents)</button>
-
-            <button class="region-btn" onclick="changeRegion('bird', this)">นก & สัตว์ปีก (Birds)</button>
-
-            <button class="region-btn" onclick="changeRegion('exotic', this)">สัตว์แปลก (Exotics)</button>
-
-        </div>
-
-
-
-        <div class="content-area">
-
-            <h2 id="current-region-title" class="region-header-title">🐶 สุนัข (Dogs)</h2>
-
-            <div id="places-list-container" class="places-grid">
-
-                </div>
-
-        </div>
-
-
-
-    </div>
-
-
-
-    <script>
-
-        // ข้อมูลสายพันธุ์สัตว์เลี้ยงและรูปภาพจำลอง
-
-        const regionData = {
-
-            dog: {
-
-                title: "🐶 สุนัข (Dogs)",
-
-                places: [
-
-                    {
-
-                        name: "โกลเด้น รีทรีฟเวอร์ (Golden Retriever)",
-
-                        desc: "สุนัขขนาดใหญ่ใจดี ฉลาด และเป็นมิตรกับทุกคน มีพลังงานสูง ชอบเล่นน้ำและคาบสิ่งของ เหมาะสำหรับเป็นสุนัขประจำครอบครัว",
-
-                        imageUrl: "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&q=80&w=400" 
-
-                    },
-
-                    {
-
-                        name: "คอร์กี้ (Pembroke Welsh Corgi)",
-
-                        desc: "เจ้าหมาขาสั้นก้นเด้ง มีเอกลักษณ์ที่หูตั้งโตและลำตัวยาว ฉลาด แข็งแรง และร่าเริง มีนิสัยชอบต้อนและเฝ้าบ้านได้เป็นอย่างดี",
-
-                        imageUrl: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&q=80&w=400" 
-
-                    }
-
-                ]
-
-            },
-
-            cat: {
-
-                title: "🐱 แมว (Cats)",
-
-                places: [
-
-                    {
-
-                        name: "บริติช ช็อตแฮร์ (British Shorthair)",
-
-                        desc: "แมวหน้ากลมแก้มย้วย ขนแน่นนุ่มเหมือนตุ๊กตาหมี นิสัยสุขุม เรียบร้อย ไม่ค่อยส่งเสียงโวยวาย และรักสงบ เป็นมิตรกับผู้เลี้ยงมาก",
-
-                        imageUrl: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&q=80&w=400" 
-
-                    },
-
-                    {
-
-                        name: "แร็กดอลล์ (Ragdoll)",
-
-                        desc: "แมวตัวใหญ่ตาฟ้า ขนปุยหนานุ่ม มีลักษณะเด่นคือเวลาอุ้มจะตัวอ่อนปวกเปียกเหมือนตุ๊กตาผ้า นิสัยอ่อนโยน เรียบร้อย และติดเจ้าของมาก",
-
-                        imageUrl: "https://images.unsplash.com/photo-1548247416-ec66f4900b2e?auto=format&fit=crop&q=80&w=400" 
-
-                    }
-
-                ]
-
-            },
-
-            rodent: {
-
-                title: "🐹 สัตว์ฟันแทะ (Rodents)",
-
-                places: [
-
-                    {
-
-                        name: "แฮมสเตอร์ (Hamster)",
-
-                        desc: "สัตว์เลี้ยงตัวจิ๋วยอดนิยม มีแก้มที่ยืดหยุ่นไว้คอยตุนอาหาร นิสัยรักอิสระ ชอบวิ่งจักรตอนกลางคืน ใช้พื้นที่เลี้ยงน้อยและดูแลไม่ยาก",
-
-                        imageUrl: "https://images.unsplash.com/photo-1548767797-d8c844163c4c?auto=format&fit=crop&q=80&w=400" 
-
-                    },
-
-                    {
-
-                        name: "แกสบี้ / หนูตะเภา (Guinea Pig)",
-
-                        desc: "หนูตัวอ้วนกลม ไม่มีหาง ส่งเสียงร้อง 'คุ้ยๆ' ทักทายเวลาหิว นิสัยเชื่อง เชื่องช้ากว่าแฮมสเตอร์และชอบอยู่รวมกันเป็นกลุ่ม",
-
-                        imageUrl: "https://images.unsplash.com/photo-1534361960057-19889db9621e?auto=format&fit=crop&q=80&w=400"
-
-                    }
-
-                ]
-
-            },
-
-            bird: {
-
-                title: "🦜 นก & สัตว์ปีก (Birds)",
-
-                places: [
-
-                    {
-
-                        name: "ฟอพัส (Forpus)",
-
-                        desc: "นกแก้วจิ๋วขนาดเล็กที่สุด มีสีสันสดใส นิสัยร่าเริง ฉลาด แสนรู้ สามารถฝึกให้เชื่อง บินอิสระ และเลียนเสียงสั้นๆ ได้อย่างน่ารัก",
-
-                        imageUrl: "https://images.unsplash.com/photo-1522856283235-acff73765104?auto=format&fit=crop&q=80&w=400" 
-
-                    },
-
-                    {
-
-                        name: "ค็อกคาเทล (Cockatiel)",
-
-                        desc: "นกแก้วที่มีหงอนบนหัวอันเป็นเอกลักษณ์และแก้มสีส้มป่อง นิสัยอ่อนโยน ขี้อ้อน ชอบร้องเพลงฮัมทำนองตามที่เจ้าของเปิดให้ฟังบ่อยๆ",
-
-                        imageUrl: "https://images.unsplash.com/photo-1551085254-e96b210db58a?auto=format&fit=crop&q=80&w=400" 
-
-                    }
-
-                ]
-
-            },
-
-            exotic: {
-
-                title: "🦎 สัตว์แปลก (Exotics)",
-
-                places: [
-
-                    {
-
-                        name: "เบียร์ดดราก้อน / มังกรเครา (Bearded Dragon)",
-
-                        desc: "กิ้งก่าทะเลทรายหน้าตาดุดันแต่ใจดี ไม่มีพิษภัย นิสัยเชื่อง นิ่ง และชอบนอนตากแดด เป็นหนึ่งในสัตว์เลื้อยคลานที่เลี้ยงง่ายที่สุด",
-
-                        imageUrl: "https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&q=80&w=400" 
-
-                    },
-
-                    {
-
-                        name: "ชูการ์ไกลเดอร์ / กระรอกบิน (Sugar Glider)",
-
-                        desc: "สัตว์เลี้ยงมีกระเป๋าหน้าท้อง สามารถกางพังผืดข้างลำตัวเพื่อร่อนจากที่สูงได้ นิสัยขี้อ้อน ติดเจ้าของ และชอบซุกนอนในกระเป๋าเสื้อ",
-
-                        imageUrl: "https://images.unsplash.com/photo-1628689531109-bfa69efb36e8?auto=format&fit=crop&q=80&w=400" 
-
-                    }
-
-                ]
-
-            }
-
-        };
-
-
-
-        // ฟังก์ชันสำหรับเปลี่ยนข้อมูลเมื่อคลิกประเภทสัตว์เลี้ยง
-
-        function changeRegion(regionKey, btnElement) {
-
-            // 1. สลับคลาส active ของปุ่ม
-
-            const buttons = document.querySelectorAll('.region-btn');
-
-            buttons.forEach(btn => btn.classList.remove('active'));
-
-            btnElement.classList.add('active');
-
-
-
-            // 2. ดึงข้อมูลภูมิภาคมาแสดง
-
-            const data = regionData[regionKey];
-
-            document.getElementById('current-region-title').innerText = data.title;
-
-
-
-            // 3. แสดงการ์ดสัตว์เลี้ยงพร้อมรูปภาพ
-
-            const container = document.getElementById('places-list-container');
-
-            container.innerHTML = ''; // ล้างข้อมูลเก่าก่อน
-
-
-
-            data.places.forEach(place => {
-
-                const imageTag = place.imageUrl ? `<img src="${place.imageUrl}" alt="${place.name}">` : '📷 รอใส่รูปภาพที่นี่';
-
-
-
-                const card = document.createElement('div');
-
-                card.className = 'place-card';
-
-                card.innerHTML = `
-
-                    <div class="place-image-box">
-
-                        ${imageTag}
-
-                    </div>
-
-                    <div class="place-info">
-
-                        <div class="place-name">📌 ${place.name}</div>
-
-                        <div class="place-description">${place.desc}</div>
-
-                    </div>
-
-                `;
-
-                container.appendChild(card);
-
-            });
-
-        }
-
-
-
-        window.onload = function() {
-
-            const defaultBtn = document.querySelector('.region-btn.active');
-
-            changeRegion('dog', defaultBtn);
-
-        };
-
-    </script>
-
-</body>
-
-</html>
+        .form-control {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
