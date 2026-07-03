@@ -162,3 +162,418 @@
             display: flex;
             flex-direction: column;
             gap: 6px;
+        }
+
+        .form-control label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #34495e;
+        }
+
+        .form-control input, .form-control textarea {
+            font-family: 'Sarabun', sans-serif;
+            padding: 10px 14px;
+            font-size: 14px;
+            border: 1.5px solid #d5dbdb;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-control input:focus, .form-control textarea:focus {
+            border-color: #e67e22;
+        }
+
+        .submit-btn {
+            grid-column: span 2;
+            padding: 12px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .submit-btn:hover {
+            background-color: #219653;
+        }
+
+        /* ส่วนตารางข้อมูล */
+        .table-card {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid #f5e6dc;
+            overflow-x: auto;
+        }
+
+        .region-header-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #f5e6dc;
+            padding-bottom: 10px;
+        }
+
+        .pet-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 15px;
+        }
+
+        .pet-table th {
+            background-color: #fdf2e9;
+            color: #d35400;
+            font-weight: 700;
+            padding: 14px;
+            border-bottom: 2px solid #fadbd8;
+        }
+
+        .pet-table td {
+            padding: 14px;
+            border-bottom: 1px solid #ebedef;
+            vertical-align: middle;
+        }
+
+        .pet-table tbody tr:hover {
+            background-color: #fdfefe;
+        }
+
+        /* ส่วนแสดงรูปภาพในตาราง */
+        .table-image-box {
+            width: 80px;
+            height: 80px;
+            background-color: #edbb99;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7f8c8d;
+            font-size: 11px;
+        }
+
+        .table-image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .table-pet-name {
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 15px;
+        }
+
+        .table-pet-desc {
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        /* ปุ่มลบข้อมูล */
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Sarabun', sans-serif;
+            font-size: 13px;
+            transition: background 0.2s;
+        }
+
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+
+        /* การแสดงผลแบบ Responsive เมื่อเปิดบนมือถือ */
+        @media (max-width: 900px) {
+            .main-container {
+                grid-template-columns: 1fr;
+            }
+
+            .pet-form {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group-full, .submit-btn {
+                grid-column: span 1;
+            }
+            
+            .pet-table, .pet-table thead, .pet-table tbody, .pet-table th, .pet-table td, .pet-table tr {
+                display: block;
+            }
+
+            .pet-table thead {
+                display: none;
+            }
+
+            .pet-table tr {
+                margin-bottom: 15px;
+                border: 1px solid #ebedef;
+                border-radius: 12px;
+                padding: 12px;
+                background: #fdfefe;
+            }
+
+            .pet-table td {
+                border: none;
+                padding: 6px 0;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .pet-table td::before {
+                content: attr(data-label);
+                font-weight: 700;
+                color: #d35400;
+                font-size: 13px;
+                margin-bottom: 3px;
+            }
+
+            .table-image-box {
+                width: 100%;
+                height: 140px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🐾 ระบบจัดการและฐานข้อมูลสัตว์เลี้ยง</h1>
+        <p>เลือกแท็บประเภทสัตว์เลี้ยง กรอกฟอร์มเพื่อบันทึกข้อมูลสายพันธุ์ใหม่ หรือกดลบข้อมูลออกจากตารางได้ทันที</p>
+    </header>
+
+    <div class="main-container">
+        
+        <div class="map-sidebar">
+            <div class="sidebar-title">📁 ประเภทฐานข้อมูล</div>
+            <button class="region-btn active" onclick="changeRegion('dog', this)">สุนัข (Dogs)</button>
+            <button class="region-btn" onclick="changeRegion('cat', this)">แมว (Cats)</button>
+            <button class="region-btn" onclick="changeRegion('rodent', this)">สัตว์ฟันแทะ (Rodents)</button>
+            <button class="region-btn" onclick="changeRegion('bird', this)">นก & สัตว์ปีก (Birds)</button>
+            <button class="region-btn" onclick="changeRegion('exotic', this)">สัตว์แปลก (Exotics)</button>
+        </div>
+
+        <div class="content-area">
+            
+            <div class="form-card">
+                <div class="form-title">➕ เพิ่มข้อมูลสายพันธุ์ใหม่</div>
+                <form id="add-pet-form" class="pet-form" onsubmit="addPetData(event)">
+                    <div class="form-control">
+                        <label for="pet-name">ชื่อสายพันธุ์ *</label>
+                        <input type="text" id="pet-name" placeholder="เช่น: ไไซบีเรียน ฮัสกี้" required>
+                    </div>
+                    <div class="form-control">
+                        <label for="pet-image">ลิงก์รูปภาพ (URL)</label>
+                        <input type="url" id="pet-image" placeholder="https://example.com/image.jpg">
+                    </div>
+                    <div class="form-control form-group-full">
+                        <label for="pet-desc">ลักษณะและพฤติกรรม *</label>
+                        <textarea id="pet-desc" rows="3" placeholder="ระบุรายละเอียด พฤติกรรม หรือจุดเด่นสำคัญ..." required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">💾 บันทึกข้อมูลลงตาราง</button>
+                </form>
+            </div>
+
+            <div class="table-card">
+                <h2 id="current-region-title" class="region-header-title">🐶 สุนัข (Dogs)</h2>
+                
+                <table class="pet-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 110px;">รูปภาพ</th>
+                            <th style="width: 220px;">สายพันธุ์</th>
+                            <th>ลักษณะและพฤติกรรม</th>
+                            <th style="width: 80px; text-align: center;">จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="places-list-container">
+                        </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // กำหนดหมวดหมู่ข้อมูลปัจจุบัน (Default เป็นสุนัข)
+        let currentGroup = 'dog';
+
+        // ฐานข้อมูลแบบ Object Array (Mock Data เริ่มต้น)
+        const regionData = {
+            dog: {
+                title: "🐶 สุนัข (Dogs)",
+                places: [
+                    {
+                        name: "โกลเด้น รีทรีฟเวอร์ (Golden Retriever)",
+                        desc: "สุนัขขนาดใหญ่ใจดี ฉลาด และเป็นมิตรกับทุกคน มีพลังงานสูง ชอบเล่นน้ำและคาบสิ่งของ เหมาะสำหรับเป็นสุนัขประจำครอบครัว",
+                        imageUrl: "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&q=80&w=400" 
+                    },
+                    {
+                        name: "คอร์กี้ (Pembroke Welsh Corgi)",
+                        desc: "เจ้าหมาขาสั้นก้นเด้ง มีเอกลักษณ์ที่หูตั้งโตและลำตัวยาว ฉลาด แข็งแรง และร่าเริง มีนิสัยชอบต้อนและเฝ้าบ้านได้เป็นอย่างดี",
+                        imageUrl: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&q=80&w=400" 
+                    }
+                ]
+            },
+            cat: {
+                title: "🐱 แมว (Cats)",
+                places: [
+                    {
+                        name: "บริติช ช็อตแฮร์ (British Shorthair)",
+                        desc: "แมวหน้ากลมแก้มย้วย ขนแน่นนุ่มเหมือนตุ๊กตาหมี นิสัยสุขุม เรียบร้อย ไม่ค่อยส่งเสียงโวยวาย และรักสงบ เป็นมิตรกับผู้เลี้ยงมาก",
+                        imageUrl: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&q=80&w=400" 
+                    },
+                    {
+                        name: "แร็กดอลล์ (Ragdoll)",
+                        desc: "แมวตัวใหญ่ตาฟ้า ขนปุยหนานุ่ม มีลักษณะเด่นคือเวลาอุ้มจะตัวอ่อนปวกเปียกเหมือนตุ๊กตาผ้า นิสัยอ่อนโยน เรียบร้อย และติดเจ้าของมาก",
+                        imageUrl: "https://images.unsplash.com/photo-1548247416-ec66f4900b2e?auto=format&fit=crop&q=80&w=400" 
+                    }
+                ]
+            },
+            rodent: {
+                title: "🐹 สัตว์ฟันแทะ (Rodents)",
+                places: [
+                    {
+                        name: "แฮมสเตอร์ (Hamster)",
+                        desc: "สัตว์เลี้ยงตัวจิ๋วยอดนิยม มีแก้มที่ยืดหยุ่นไว้คอยตุนอาหาร นิสัยรักอิสระ ชอบวิ่งจักรตอนกลางคืน ใช้พื้นที่เลี้ยงน้อยและดูแลไม่ยาก",
+                        imageUrl: "https://images.unsplash.com/photo-1548767797-d8c844163c4c?auto=format&fit=crop&q=80&w=400" 
+                    },
+                    {
+                        name: "แกสบี้ / หนูตะเภา (Guinea Pig)",
+                        desc: "หนูตัวอ้วนกลม ไม่มีหาง ส่งเสียงร้อง 'คุ้ยๆ' ทักทายเวลาหิว นิสัยเชื่อง เชื่องช้ากว่าแฮมสเตอร์และชอบอยู่รวมกันเป็นกลุ่ม",
+                        imageUrl: "https://images.unsplash.com/photo-1534361960057-19889db9621e?auto=format&fit=crop&q=80&w=400"
+                    }
+                ]
+            },
+            bird: {
+                title: "🦜 นก & สัตว์ปีก (Birds)",
+                places: [
+                    {
+                        name: "ฟอพัส (Forpus)",
+                        desc: "นกแก้วจิ๋วขนาดเล็กที่สุด มีสีสันสดใส นิสัยร่าเริง ฉลาด แสนรู้ สามารถฝึกให้เชื่อง บินอิสระ และเลียนเสียงสั้นๆ ได้อย่างน่ารัก",
+                        imageUrl: "https://images.unsplash.com/photo-1522856283235-acff73765104?auto=format&fit=crop&q=80&w=400" 
+                    },
+                    {
+                        name: "ค็อกคาเทล (Cockatiel)",
+                        desc: "นกแก้วที่มีหงอนบนหัวอันเป็นเอกลักษณ์และแก้มสีส้มป่อง นิสัยอ่อนโยน ขี้อ้อน ชอบร้องเพลงฮัมทำนองตามที่เจ้าของเปิดให้ฟังบ่อยๆ",
+                        imageUrl: "https://images.unsplash.com/photo-1551085254-e96b210db58a?auto=format&fit=crop&q=80&w=400" 
+                    }
+                ]
+            },
+            exotic: {
+                title: "🦎 สัตว์แปลก (Exotics)",
+                places: [
+                    {
+                        name: "เบียร์ดดราก้อน / มังกรเครา (Bearded Dragon)",
+                        desc: "กิ้งก่าทะเลทรายหน้าตาดุดันแต่ใจดี ไม่มีพิษภัย นิสัยเชื่อง นิ่ง และชอบนอนตากแดด เป็นหนึ่งในสัตว์เลื้อยคลานที่เลี้ยงง่ายที่สุด",
+                        imageUrl: "https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&q=80&w=400" 
+                    },
+                    {
+                        name: "ชูการ์ไกลเดอร์ / กระรอกบิน (Sugar Glider)",
+                        desc: "สัตว์เลี้ยงมีกระเป๋าหน้าท้อง สามารถกางพังผืดข้างลำตัวเพื่อร่อนจากที่สูงได้ นิสัยขี้อ้อน ติดเจ้าของ และชอบซุกนอนในกระเป๋าเสื้อ",
+                        imageUrl: "https://images.unsplash.com/photo-1628689531109-bfa69efb36e8?auto=format&fit=crop&q=80&w=400" 
+                    }
+                ]
+            }
+        };
+
+        // ฟังก์ชันสร้างและเรนเดอร์ตารางใหม่จากข้อมูลอาเรย์
+        function renderTable() {
+            const data = regionData[currentGroup];
+            document.getElementById('current-region-title').innerText = data.title;
+
+            const tbody = document.getElementById('places-list-container');
+            tbody.innerHTML = ''; // ล้างข้อมูลแถวเก่า
+
+            // หากไม่มีข้อมูลในประเภทนั้นๆ เลย
+            if(data.places.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#95a5a6; padding: 30px;">ไม่มีข้อมูลสายพันธุ์ในหมวดหมู่นี้ กรุณากรอกเพิ่มข้อมูลที่ฟอร์มด้านบน</td></tr>`;
+                return;
+            }
+
+            // วนลูปข้อมูลเพื่อสร้างแท็ก <tr> ลงตาราง
+            data.places.forEach((place, index) => {
+                const imageTag = place.imageUrl ? `<img src="${place.imageUrl}" alt="${place.name}">` : '📷 ไม่มีรูป';
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td data-label="รูปภาพ">
+                        <div class="table-image-box">${imageTag}</div>
+                    </td>
+                    <td data-label="สายพันธุ์">
+                        <div class="table-pet-name">📌 ${place.name}</div>
+                    </td>
+                    <td data-label="ลักษณะและพฤติกรรม">
+                        <div class="table-pet-desc">${place.desc}</div>
+                    </td>
+                    <td data-label="จัดการ" style="text-align: center;">
+                        <button class="delete-btn" onclick="deletePetData(${index})">❌ ลบ</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // ฟังก์ชันสลับเมนูฐานข้อมูลด้านซ้าย
+        function changeRegion(regionKey, btnElement) {
+            currentGroup = regionKey;
+            
+            const buttons = document.querySelectorAll('.region-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            renderTable();
+        }
+
+        // ฟังก์ชันรับค่าจากฟอร์มและ Push ลง Array 
+        function addPetData(event) {
+            event.preventDefault(); // ป้องกันเบราว์เซอร์รีเฟรชหน้าจอ
+
+            const nameInput = document.getElementById('pet-name');
+            const imageInput = document.getElementById('pet-image');
+            const descInput = document.getElementById('pet-desc');
+
+            // บันทึกข้อมูลใหม่ลง Object Array ในกลุ่มประเภทปัจจุบัน
+            regionData[currentGroup].places.push({
+                name: nameInput.value,
+                desc: descInput.value,
+                imageUrl: imageInput.value || null
+            });
+
+            // เคลียร์ฟอร์มให้ว่างหลังบันทึกเสร็จ
+            document.getElementById('add-pet-form').reset();
+
+            // เรียกฟังก์ชันเรนเดอร์ตารางใหม่ทันที
+            renderTable();
+        }
+
+        // ฟังก์ชันลบแถวข้อมูลตาม Index
+        function deletePetData(index) {
+            if(confirm("คุณแน่ใจใช่ไหมว่าต้องการลบข้อมูลสายพันธุ์นี้ออกจากระบบ?")) {
+                regionData[currentGroup].places.splice(index, 1);
+                renderTable(); // เรนเดอร์ตารางใหม่หลังลบ
+            }
+        }
+
+        // ให้ระบบทำการเรนเดอร์ตารางครั้งแรกตอนเปิดหน้าเว็บ
+        window.onload = function() {
+            renderTable();
+        };
+    </script>
+</body>
+</html>
